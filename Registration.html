@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+    </script>
+    <title>Registration</title>
+</head>
+<body>
+    <div class="container" style="width: 1000px;">
+        <h2 class="text-center border-bottom pb-4 pt-2">Registration</h2>
+        <form class="row" regipractical action="Accountinfo.html" >
+     
+          <div class="row">
+            <div class="col-lg-6 col-sm-12 col-md-6">
+                <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3 ">First Name</label>
+                <input type="text" class="form-control py-3 required" id="firstname" name="fname" placeholder="Enter First Name" >
+              </div>
+
+              <div class="col-lg-6 col-sm-12 col-md-6">
+                <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3 ">Last Name</label>
+                <input type="text" class="form-control py-3 required" id="lastname"  name="lname" placeholder="Enter Last Name" >
+              </div>
+
+              <div class="col-lg-12 col-sm-12 col-md-6">
+                <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3 ">E-mail</label>
+                <input type="email" class="form-control py-3 required" id="email" placeholder="Enter your email" >
+              </div>
+
+              <div class="col-lg-6 col-sm-12  col-md-6">
+                <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3">Date of birth</label>
+                <input type="date" class="form-control py-3 required" id="birth" placeholder="pick a Date" >
+              </div>
+
+              <div class="col-lg-6 col-sm-12  col-md-6">
+                <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3 ">Gender</label>
+                <div class=" fw-bold pt-3">
+                  <input type="radio" name="gender" value="male" id="btn1" checked> Male
+                  <span class="m-2"></span>
+                  <input type="radio" name="gender" value="female" id="btn2"> Female
+                </div>
+              </div>
+
+              
+              <div class="col-lg-6 col-sm-12  col-md-6">
+                <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3">Password</label>
+                <input type="password" class="form-control py-3 required" id="password" placeholder="Password" >
+              </div>
+
+              
+              <div class="col-lg-6 col-sm-12  col-md-6">
+                <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3">Confirm Password</label>
+                <input type="password" class="form-control py-3 required" id="conpass" placeholder="Confirm Password" >
+              </div>
+
+              <div class=" d-flex pt-4" >
+                  <h6 class="pt-1" style="color: rgb(114, 104, 104);">Already a member?</h6>
+                  <span class="m-2"></span>
+                  <a href="Login.html" class="fw-bold " style="color: black; text-decoration: none; padding: 2px 0;"> Login Now</a>
+              </div>
+
+              <div class="col-2 pt-2">
+                  <button type="submit" id="submit" class="btn btn-dark w-100 mt-3"
+                    style="height: 55px;">Register</button>
+             </div> 
+
+          </div>  
+        </form>
+    </div>
+
+    <!-- <div class="container" style="width: 1000px;">
+    <table class=" mt-4 table">
+      <tbody id="tableData">
+        <thead style="background-color: aliceblue;">
+          <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>DOB</th>
+            <th>Gender</th>
+          </tr>
+        </thead>
+      </tbody>
+    </table>
+  </div> -->
+ 
+  <script>
+    
+       
+       var user_records= [];
+      // var updateIndex;
+    class  regipractical {
+      constructor(){
+        this.form = document.querySelector('[regipractical]');
+        this.outputTable = document.querySelector('#tableData');
+        this.fname = this.form.querySelector('#firstname');
+        this.lname = this.form.querySelector('#lastname');
+        this.mail= this.form.querySelector('#email')
+        this.bday = this.form.querySelector('#birth');
+        this.password= this.form.querySelector('#password');
+        this.confirmpass= this.form.querySelector('#conpass');
+        this.userDataArray = [];
+        // this.updateIndex = "null";
+        this.form.addEventListener('submit', this.onSubmitHandler.bind(this));
+
+      }
+
+      onSubmitHandler(event){
+        event.preventDefault();
+
+        let requiredFields = this.form.getElementsByClassName('required');
+              let validateForm = true;
+              Array.from(requiredFields).forEach((field)=>{
+                let fieldValue = field.value.trim();
+                if(fieldValue == undefined || fieldValue == '' || fieldValue.length <= 0){
+                  validateForm = false;
+                  return false;
+                }
+              });
+              if(!validateForm){
+                alert('Enter Necessary Field');
+                 return;
+               }
+
+        let firstname=this.fname.value;
+        let lastname=this.lname.value;
+        let Email=this.mail.value;
+        let dob=this.bday.value;
+        
+        let gender = this.form.querySelector('[name="gender"]:checked') ? this.form.querySelector(
+          '[name="gender"]:checked').value : '';
+
+        let pass=this.password.value;
+        let confpass=this.confirmpass.value;
+
+        // localStorage.setItem("FIRSTNAME", firstname);
+        // localStorage.setItem("LASTNAME", lastname);
+        // localStorage.setItem("DOB", dob);
+        // localStorage.setItem("GENDER", gender);
+
+        let userData = {
+          firstname : firstname,
+          lastname : lastname,
+          Email : Email,
+          dob : dob,
+          gender : gender,
+         
+        }
+
+        user_records=JSON.parse(localStorage.getItem("userData"))?JSON.parse(localStorage.getItem("userData")):[]
+       if(user_records.some((v)=>{return v.Email==Email}))
+        {
+           alert("duplicate data");
+        }
+      else
+        {
+          user_records.push({
+            firstname : firstname,
+          Lastname : lastname,
+          Email : Email,
+          Dob : dob,
+          gender : gender,
+        })
+         localStorage.setItem("userData",JSON.stringify(user_records));
+       }
+        this.userDataArray.push(userData);
+        console.log(this.userDataArray);
+        this.form.reset();
+        // this.updateUI();
+
+      }
+
+      // updateUI() {
+      //   var datatable = '<tbody>'
+      //   for (let i = 0; i < this.userDataArray.length; i++) {
+      //     datatable += `<tr>
+      //     <td> ${i+1} </td>
+      //     <td>  ${this.userDataArray[i].firstname} ${this.userDataArray[i].lastname} </td>
+      //     <td>  ${this.userDataArray[i].Email} </td>
+      //     <td>  ${this.userDataArray[i].dob} </td>
+      //     <td>  ${this.userDataArray[i].gender} </td>
+      //     </tr>`
+      //     document.getElementById('tableData');
+      //   }
+      //   datatable += '</tbody>';
+      //   document.getElementById('tableData').innerHTML = datatable;
+       
+      // }
+      
+    }
+
+    new regipractical();
+
+  </script>
+
+</body>
+</html>

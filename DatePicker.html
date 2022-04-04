@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <title>Datepicker</title>
+</head>
+
+<body>
+    <div class="container" style="width: 1000px;">
+        <h2 class="text-center border-bottom pt-2 pb-3 ">Date's & Date Picker</h2>
+
+        <form class="row" datepickerpractical>
+            <div class="row">
+                <div class="col-lg-6 col-sm-12 col-md-6">
+                    <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3">Start Date</label>
+                    <input type="text" class="form-control py-3 required" id="startDate"
+                        placeholder="Pick a Start Date">
+                </div>
+
+                <div class="col-lg-6 col-sm-12 col-md-6">
+                    <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3">End Date</label>
+                    <input type="text" class="form-control py-3 required" id="endDate" placeholder="Pick a End Date">
+                </div>
+
+                <h4 class="pt-3 my-5 fw-bold">Select Condition</h4>
+
+
+                <div class="row">
+
+                    <div class="col-4">
+                        <!-- <input class="form-check-input p-2 me-2" type="checkbox" value=" disable Weekends" id="disableWeekends"> -->
+                        <input class="form-check-input p-2 me-2 " name="check" id="disabledweekend" type="checkbox"
+                            value="">
+                        <label class="form-check-label fs-5 fw-bold pb-1" for="flexCheckDefault">
+                            Weekends
+                        </label>
+                    </div>
+
+                    <div class="col-4">
+                        <input class="form-check-input p-2 me-2" type="checkbox" value="" id="specialcheck">
+                        <label class="form-check-label fs-5 fw-bold mb-3" for="flexCheckDefault">
+                            Special Days
+                        </label>
+                        <input class="form-control py-3" id="Specialday" type="text" placeholder="Select Day">
+                    </div>
+
+                    <div class="col-4">
+                        <input class="form-check-input p-2 me-2" type="checkbox" value="" id="disabledweekdays">
+                        <label class="form-check-label fs-5 fw-bold mb-3" for="flexCheckDefault">
+                            Week Days
+                        </label>
+                        <div class="input-group ">
+                            <select class="form-select py-3 " id="selectdays" aria-label="Default select example">
+                                <option value="" selected>Select days</option>
+                                <option value="0">Sunday</option>
+                                <option value="1">Monday</option>
+                                <option value="2">Tuesday</option>
+                                <option value="3">Wednesday</option>
+                                <option value="4">Thursday</option>
+                                <option value="5">Friday</option>
+                                <option value="6">Saturday</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-2 ">
+                    <button type="submit" id="submit" class="btn btn-dark w-100 mt-3"
+                        style="height: 55px;">Validate</button>
+                </div>
+
+            </div>
+
+        </form>
+        <h2 class="text-center border-bottom pb-5" style="margin-top: 50px;">Output</h2>
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th scope="col">Days</th>
+                    <th scope="col">hours</th>
+                    <th scope="col">Min</th>
+                    <th scope="col">Sec</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="timer-days"></td>
+                    <td id="timer-hours"></td>
+                    <td id="timer-minutes"></td>
+                    <td id="timer-seconds"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        var startdate = flatpickr("#startDate", {});
+        var enddate = flatpickr("#endDate", {});
+        //    var specialday= flatpickr("#Specialday",{});
+
+        class datepickerpractical {
+            constructor() {
+                this.form = document.querySelector('[datepickerpractical]');
+                // console.log(this.form)
+                this.startdate = document.querySelector('#startDate');
+                this.enddate = document.querySelector('#endDate');
+                this.validateBtn = this.form.querySelector('[type="submit"]');
+                this.weekend = this.form.querySelector('#disabledweekend');
+                this.specialday = this.form.querySelector('#Specialday');
+                this.weekdays = this.form.querySelector('#selectdays');
+                this.form.addEventListener('submit', this.onvalidateHandler.bind(this));
+                // this.form.addEventListener('specialcheck', this.onvalidateHandler.bind(this));
+                // this.Weekendupdate();
+                this.weekend.addEventListener('change', this.disableWeekends.bind(this));
+                this.weekdays.addEventListener("change", this.disableweekDays.bind(this));
+                this.specialdayevent();
+
+            }
+            onvalidateHandler(event) {
+                event.preventDefault();
+
+                let requiredFields = this.form.getElementsByClassName('required');
+                let validateForm = true;
+                Array.from(requiredFields).forEach((field) => {
+                    let fieldValue = field.value.trim();
+                    if (fieldValue == undefined || fieldValue == '' || fieldValue.length <= 0) {
+                        validateForm = false;
+                        return false;
+                    }
+                });
+                if (!validateForm) {
+                    alert('Enter Necessary Field');
+                    return;
+                }
+
+                let date = new Date(this.startdate.value);
+                //    console.log(date);
+                let today = date.getDate();
+                //    console.log(today);
+                let startDate = this.startdate.value;
+                // console.log(startDate)
+                let endDate = this.enddate.value;
+                //    console.log(endDate);
+                let specialDay = this.specialday.value;
+                //    console.log(specialDay)
+                let weekDays = this.weekdays.value;
+                //    console.log(weekDays)
+
+                if (startDate > endDate) {
+                    alert("greater than")
+                }
+                //    else if(startDate < endDate){
+                //       alert("less than")
+                //    }
+
+                var date1 = new Date(this.startdate.value);
+                var date2 = new Date(this.enddate.value);
+                var x = setInterval(function () {
+                    var today = new Date();
+                    var currentime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                    // console.log(currentime)
+                    // Get today's date and time
+                    let dis1 = date1.getTime();
+                    let dis2 = date2.getTime();
+                    // Find the distance between now and the count down date
+                    var distance = dis2 - today;
+                    var timerDisplaySeconds = document.getElementById('timer-seconds');
+                    var timerDisplayMinutes = document.getElementById('timer-minutes');
+                    var timerDisplayHour = document.getElementById('timer-hours');
+                    var timerDisplayday = document.getElementById('timer-days');
+                    // Time calculations for days, hours, minutes and seconds
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    // Output the result in an element with id="demo"
+                    console.log(days, hours, minutes, seconds)
+                    timerDisplaySeconds.innerHTML = seconds < 10 ? '0' + seconds : seconds;
+                    timerDisplayMinutes.innerHTML = minutes < 10 ? '0' + minutes : minutes;
+                    timerDisplayHour.innerHTML = hours < 10 ? '0' + hours : hours;
+                    timerDisplayday.innerHTML = days;
+                    if (distance < 0) {
+                        clearInterval(this.timer);
+                        console.log("Countdown End");
+                    }
+                    // If the count down is over, write some text
+                }, 1000)
+
+                // this.updateEvents();
+            }
+
+            disableWeekends(event) {
+                event.preventDefault();
+                if (document.getElementById('disabledweekend').checked) {
+                    var config = {
+
+                        "disable": [
+                            function (date) {
+                                // return true to disable
+                                return (date.getDay() === 0 || date.getDay() === 6);
+                            }
+                        ],
+                        "locale": {
+                            "firstDayOfWeek": 1 // start week on Monday
+
+                        }
+                    }
+                    var startdate = flatpickr("#startDate", config);
+                    var enddate = flatpickr("#endDate", config);
+                } else {
+
+                    var startdate = flatpickr("#startDate", {});
+                    var enddate = flatpickr("#endDate", {});
+                }
+
+                //    var checkbox = this.form.querySelectorAll('[name="check"]: checked') ? this.form.querySelectorAll(
+                //   '[name="check"]:checked').value : '';
+
+            }
+
+            // Weekendupdate() {
+            //     let updatebtn = this.form.querySelectorAll('#disabledweekend');
+            //     updatebtn.forEach((btn) => {
+            //         btn.addEventListener("change", this.disableWeekends.bind(this));
+            //     });
+            // }
+
+            disableweekDays(event) {
+                // event.preventDefault();
+                // console.log("hi");
+                let days = this.weekdays;
+                let dayvalue = this.weekdays.value;
+                if (document.getElementById('disabledweekdays').checked) {
+                   var config = {
+                            "disable": [
+                                function (date) {
+                                    // return true to disable
+                                    return (date.getDay() == days.value);
+                                }
+                            ],
+                            "locale": {
+                                "firstDayOfWeek": 1 // start week on Monday
+                            }
+                        }
+                        var startdate = flatpickr("#startDate", config);
+                        var enddate = flatpickr("#endDate", config);
+                      }
+                    else {
+                    var startdate = flatpickr("#startDate", {});
+                    var enddate = flatpickr("#endDate", {});
+                }
+                this.update();
+            }
+
+            // selectedays() {
+            //     let selectdaycheckbox = this.form.querySelectorAll('#disabledweekdays');
+            //     selectdaycheckbox.forEach((checkbox) => {
+            //         checkbox.addEventListener('change', this.disableweekDays.bind(this));
+            //     })
+            // }
+            update() {
+                let selectdaycheckbox = this.form.querySelectorAll('#disabledweekdays');
+                selectdaycheckbox.forEach((checkbox) => {
+                    checkbox.addEventListener('change', this.disableweekDays.bind(this));
+                })
+            }
+
+            specialDay(event) {
+                event.preventDefault();
+                let sday = this.specialday;
+                let sdayvalue = this.specialday.value;
+                if (document.getElementById('specialcheck').checked) {
+                    var config = {
+                        "disable": [sdayvalue],
+                        "locale": {
+                            firstDayOfWeek: 1, // start week on Monday
+
+                        },
+                    };
+                    var startdate = flatpickr("#startDate", config);
+                    var endate = flatpickr("#endDate", config);
+                } else {
+                    var startdate = flatpickr("#startDate", {});
+                    var enddate = flatpickr("#endDate", {});
+                }
+            }
+
+            specialdayevent() {
+                let specialdaybox = this.form.querySelectorAll("#specialcheck");
+                specialdaybox.forEach((btn) => {
+                    btn.addEventListener("change", this.specialDay.bind(this));
+                });
+            }
+        }
+        new datepickerpractical();
+    </script>
+  
+</body>
+</html>

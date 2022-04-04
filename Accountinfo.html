@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+    </script>
+    <title>Account</title>
+</head>
+<body>
+    <div class="container" style="width: 1000px;">
+        <form action="Login.html">
+            <h2 class="text-center border-bottom pb-5" style="margin-top: 100px">
+                Login
+            </h2>
+            <div class="col-2 ms-auto">
+            <a href="Login.html">
+                <button type="submit" id="submit" class="btn btn-dark w-100 mt-3" style="height: 55px">
+                    Log Out
+                </button>
+            </a>
+            </div>
+            <div class="row mb-3 mt-4 text-center">
+                <div class="col-6">
+                    <label for="validationCustom01" class="form-label fs-4 ">First Name :</label>
+                    <h4 id="firstname"  class="fs-3 fw-bold"></h4>
+                </div>
+                <div class="col-6">
+                    <label for="validationCustom01" class="form-label fs-4 ">Last Name :</label>
+                    <h4 id="lastname" class="fs-3 fw-bold"></h4>
+                </div>
+            </div>
+            <div class="row mt-3 text-center">
+                <div class="col-6">
+                    <label for="validationCustom01" class="form-label fs-4 ">Date Of Birth :</label>
+                    <h4 id="dob"  class="fs-3 fw-bold"></h4>
+                </div>
+                <div class="col-6">
+                    <label for="validationCustom01" class="form-label fs-4 ">Gender :</label>
+                    <h4 id="gender"  class="fs-3 fw-bold"></h4>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- <div class="container" style="width: 1000px;">
+        <h2 class="text-center border-bottom pb-4 pt-5">Account info</h2>
+        <div class="row">
+
+            <div class="col-lg-6 pt-5 ">
+                <h2>First Name :  <br>
+                       <span class="m-5" id="result-firstname" ></span></h2>
+            </div>
+
+            <div class="col-lg-6  pt-5" >
+                <h2>Last Name :  <br>
+                     <span class="m-5" id="result-lastname"></span></h2>
+            </div>
+
+            <div class="col-lg-6  pt-5" >
+                <h2 >Date Of Birth :  <br>
+                    <span class="m-5" id="result-dob"></span></h2>
+            </div>
+
+            <div class="col-lg-6  pt-5">
+                <h2 class="text-center"  > Gender :   <br>
+                    <span class="m-5 text-center" id="result-gender"></span></h2>
+            </div>
+        
+            <div class="text-end  pt-4">
+                <button type="submit" id="submit" class="btn btn-dark  mt-12"
+                    style="height: 55px; width: 100px;">Logout</button>
+            </div> 
+
+            
+        </div>
+    </div> -->
+
+    <script>
+
+        var local = localStorage.getItem('userData');
+        console.log(local,JSON.parse(local))
+        var deta = JSON.parse(local);
+        for (var i=0; i < deta.length; i++) {
+          console.log(deta[i]);
+          document.getElementById('firstname').innerHTML= deta[i].firstname;
+          document.getElementById('lastname').innerHTML= deta[i].Lastname;
+          document.getElementById('dob').innerHTML= deta[i].Dob;
+          document.getElementById('gender').innerHTML= deta[i].gender;
+        }
+
+    </script>
+</body>
+</html>
+
+
+
+<!-- 
+<body>
+    <h1>
+        Result Page
+    </h1>
+    <h2>
+        userData: <span id="result-name" >
+    </h2>
+    <h2>
+        Surname: <span id="result-surname" >
+    </h2>
+
+    <script>
+        window.addEventListener('submit', () => {
+
+    // Via Query parameters - GET
+    /* const params = (new URL(document.location)).searchParams;
+    const name = params.get('name');
+    const surname = params.get('surname'); */
+
+    //  Via local Storage
+     const userData = localStorage.getItem('userData');
+   
+
+    // const name = sessionStorage.getItem('NAME');
+    // const surname = sessionStorage.getItem('SURNAME');
+
+    document.getElementById('result-name').innerHTML = userData;
+    // document.getElementById('result-surname').innerHTML = surname;
+
+}) 
+    </script>
+</body> -->

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <title>Date Picker</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="col-12 col-lg-10 col-xl-9 mx-auto" style="padding-top: 100px; padding-left: 20px; padding-right: 20px;">
+      <form class="row g-3 needs-validation" id="form" datepickerPractical novalidate>
+        <h2 class="text-center">DatePicker</h2>
+        <div class="col-6">
+          <label for="validationCustom01" class="form-label m-0 ">Start Date</label>
+          <input class="form-control" type="date" id="startdate" placeholder="Select start date">
+        </div>
+        <div class="col-6">
+          <label for="validationCustom01" class="form-label m-0 ">End Date</label>
+          <input class="form-control" type="date" id="enddate" placeholder="Select end date">
+        </div>
+        <div class="col-12">
+          <h6>Select Condition</h6>
+          <div class="d-flex">
+            <div class="form-check">
+              <input type="checkbox" value="Disable Weekends" id="disableweekends">
+              <label class="form-check-label" for="flexCheckDefault">Disable Weekends</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" value="Disable Special Days" id="disablespecialdays">
+              <label class="form-check-label" for="flexCheckDefault">Disable Special Days</label>
+              <input class="d-block" type="text" id="enterday" placeholder="Enter Day">
+            </div>
+            <div class="form-check">
+              <input type="checkbox" value="Disable WeekDays" id="disableweekdays">
+              <label class="form-check-label" for="flexCheckDefault">Disable WeekDays</label>
+              <select class="col-12 py-1" id="days" aria-label="Default select example">
+                <option value="" selected>Select Days</option>
+                <option value="1">Monday</option>
+                <option value="2">Tuesday</option>
+                <option value="3">Wednesday</option>
+                <option value="4">Thursday</option>
+                <option value="5">Friday</option>
+                <option value="6">Saturday</option>
+                <option value="0">Sunday</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 ms-auto d-flex">
+          <button class="btn btn-dark" id="submit" type="submit">Validate</button>
+        </div>
+      </form>
+      <div>
+        <h2 class="text-center">Output</h2>
+        <table class="mt-4 table text-center">
+          <thead>
+            <tr>
+              <th>Days</th>
+              <th>Hours</th>
+              <th>Minutes</th>
+              <th>Seconds</th>
+            </tr>
+          </thead>
+          <tbody id="tableData">
+            <tr>
+              <td id="timer-days"></td>
+              <td id="timer-hours"></td>
+              <td id="timer-minutes"></td>
+              <td id="timer-seconds"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script>
+    var startdate = flatpickr("#startdate", {});
+    var endate = flatpickr("#enddate", {});
+    //     const fp = flatpickr("#startdate", {});
+    //    console.log(fp.selectedDates)
+    class datepickerpractical {
+
+      constructor() {
+        this.form = document.querySelector('[datepickerPractical]');
+        this.startdate = document.querySelector('#startdate');
+        this.endate = document.querySelector('#enddate');
+        this.validateBtn = this.form.querySelector('[type="submit"]');
+        this.enterday = this.form.querySelector('#enterday');
+        this.weekend = this.form.querySelector('#disableweekends')
+        this.days = this.form.querySelector('#days');
+        this.form.addEventListener('submit', this.onValidateHandler.bind(this));
+        this.weekend.addEventListener("change", this.weekendhandler.bind(this));
+        this.days.addEventListener("change", this.selectedayshandler.bind(this));
+        // this.weekend()
+        // this.selectedays()
+        this.specialday()
+      }
+      onValidateHandler(event) {
+        event.preventDefault();
+        console.log(this.days.value)
+        let startingday = new Date(this.startdate.value);
+        //           console.log(d);
+        //           let e = d.getTime();
+        //           console.log(e)
+        let endingday = new Date(this.endate.value);
+
+        console.log(startingday, endingday);
+        if (startingday > endingday) {
+          alert('Starting Date is Greater than ending date')
+        }
+        //           let g=f.getTime();
+        //           console.log(g);
+        //           var distance = g - e;
+        //           console.log(distance)
+        var today = new Date();
+        console.log(today)
+        var currentime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        console.log(currentime)
+        //   // Time calculations for days, hours, minutes and seconds
+        //   var days = Math.floor(distance/1000 / 60 / 60 / 24);
+        //   var hours = Math.floor(distance / (1000 * 60 * 60));
+        //   var minutes = Math.floor(distance/(1000*60));
+        //   var seconds = Math.floor(distance/1000);
+        //   console.log(days,hours,minutes,seconds)
+        if (today > startingday) {
+          var x = setInterval(function () {
+            var today = new Date();
+            console.log(today)
+            var currentime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            console.log(currentime)
+            // Get today's date and time
+            let dis1 = startingday.getTime();
+            let dis2 = endingday.getTime();
+            console.log(startingday)
+            // Find the distance between now and the count down date
+            var distance = dis2 - today;
+            var timerDisplaySeconds = document.getElementById('timer-seconds');
+            var timerDisplayMinutes = document.getElementById('timer-minutes');
+            var timerDisplayHour = document.getElementById('timer-hours');
+            var timerDisplayday = document.getElementById('timer-days');
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            timerDisplaySeconds.innerHTML = seconds < 10 ? '0' + seconds : seconds;
+            timerDisplayMinutes.innerHTML = minutes < 10 ? '0' + minutes : minutes;
+            timerDisplayHour.innerHTML = hours < 10 ? '0' + hours : hours;
+            timerDisplayday.innerHTML = days;
+            // Output the result in an element with id="demo"
+            console.log(days, hours, minutes, seconds)
+            // If the count down is over, write some text
+          }, 1000);
+        }
+        if (today < startingday) {
+          alert('Sale is not yet started')
+        }
+
+      }
+      weekendhandler(event) {
+        event.preventDefault();
+        if (document.getElementById('disableweekends').checked) {
+          var config = {
+            "disable": [
+              function (date) {
+                // return true to disable
+                return (date.getDay() === 0 || date.getDay() === 6);
+              }
+            ],
+            "locale": {
+              "firstDayOfWeek": 1 // start week on Monday
+            }
+          }
+          var startdate = flatpickr("#startdate", config);
+          var endate = flatpickr("#enddate", config);
+        } else {
+          var startdate = flatpickr("#startdate", {});
+          var endate = flatpickr("#enddate", {});
+        }
+      }
+      // weekend() {
+      //   let updatebtn = this.form.querySelectorAll('#disableweekends');
+      //   updatebtn.forEach((checkbox) => {
+      //     checkbox.addEventListener('change', this.weekendhandler.bind(this));
+      //   })
+      // }
+
+      selectedayshandler(event) {
+        console.log('hello');
+        let selecteday = this.days;
+        if (document.getElementById('disableweekdays').checked) {
+          var config = {
+            "disable": [
+              function (date) {
+                // return true to disable
+                return (date.getDay() == selecteday.value);
+              }
+            ],
+            "locale": {
+              "firstDayOfWeek": 1 // start week on Monday
+            }
+          }
+          var startdate = flatpickr("#startdate", config);
+          var endate = flatpickr("#enddate", config);
+        }
+        
+        else {
+          var startdate = flatpickr("#startdate", {});
+          var endate = flatpickr("#enddate", {});
+        }
+        this.update();
+      }
+
+      // selectedays() {
+      //   let selectdaycheckbox = this.form.querySelectorAll('#disableweekdays');
+      //   selectdaycheckbox.forEach((checkbox) => {
+      //     checkbox.addEventListener('change', this.selectedayshandler.bind(this));
+      //   })
+      // }
+      update() {
+        let selectdaycheckbox = this.form.querySelectorAll('#days');
+        selectdaycheckbox.forEach((checkbox) => {
+          checkbox.addEventListener('change', this.selectedayshandler.bind(this));
+        })
+      }
+      specialdayhandler(event) {
+        event.preventDefault();
+        let entereday = this.enterday;
+        let dt = new Date(entereday.value);
+        console.log(dt)
+        if (document.getElementById('disablespecialdays').checked) {
+          var config = {
+            "disable": [dt],
+            "locale": {
+              "firstDayOfWeek": 1 // start week on Monday
+            }
+          }
+          var startdate = flatpickr("#startdate", config);
+          var endate = flatpickr("#enddate", config);
+        } else {
+          var startdate = flatpickr("#startdate", {});
+          var endate = flatpickr("#enddate", {});
+        }
+
+      }
+      specialday() {
+        let specialday = this.form.querySelectorAll('#disablespecialdays');
+        specialday.forEach((checkbox) => {
+          checkbox.addEventListener('change', this.specialdayhandler.bind(this));
+        })
+
+      }
+    }
+    new datepickerpractical();
+  </script>
+</body>
+
+</html>
+
+<!-- selectedayshandler(event){
+console.log('hello');
+let selecteday = this.days;
+if(document.getElementById('disableweekdays').checked){
+var config = {
+"disable": [
+function(date) {
+// return true to disable
+return (date.getDay() == selecteday.value);
+}
+],
+"locale": {
+"firstDayOfWeek": 1 // start week on Monday
+}
+}
+var startdate = flatpickr("#startdate",config);
+var endate = flatpickr("#enddate",config);
+}
+else{
+var startdate = flatpickr("#startdate",{});
+var endate = flatpickr("#enddate",{});
+}
+this.update();
+} -->

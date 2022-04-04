@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Form Array</title>
+    <style>
+     
+      </style>
+</head>
+<body>
+    <div class="col-4 mx-auto " style="padding-top: 100px;">
+        <form class="row g-3 needs-validation" id="form" dataTypePractical novalidate>
+            <h2 class="text-center">Array</h2>
+            <div class="col-6">
+                <label for="validationCustom01" class="form-label m-0 ">Name</label>
+                <input type="text" class="form-control required" id="name" value="" placeholder="Write" required>
+              </div>
+        <div class="col-6">
+            <label for="Data type" class="col-12 mb-1">Department</label>
+            <!-- <select class="col-4 py-1" id="select1" aria-label="Default select example" onchange="differ(this.id,'select2')"> -->
+                <select class="col-12 py-1" id="department" aria-label="Default select example">
+                <option value="" selected>Select Department</option>
+                <option value="Designer" >Designer</option>
+                <option value="Front-End">Front-End</option>
+                <option value="Back-End">Back-End</option>
+                <option value="Ui/Ux" >Ui/Ux</option>
+                <option value="Human Resource" >Human Resource</option>
+              </select>
+        </div>
+
+        <div class="col-6">
+            <label for="validationCustom01" class="form-label m-0 ">Date Of Birth</label>
+            <input type="date" class="form-control required" id="dob" value=""  required>
+          </div>
+          <div class="radio col-6">
+            <label for="validationCustom01" class="form-label mb-2 col-12">Gender</label>
+            <label class="radio-inline">
+                <input type="radio" name="gender" id="r1" value="male">Male
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="gender" id="r2" value="female">Female
+              </label>
+          </div>
+          <div class="mb-3 col-12">
+            <label for="exampleFormControlTextarea1" class="form-label">Hobbies</label>
+            <textarea class="form-control required" id="hobbies" rows="3"></textarea>
+          </div>
+          <div class="col-12 ms-auto d-flex">
+            <button class="btn btn-dark" id="submit" type="submit">Submit</button>
+            <button class="btn btn-dark" id="update" style="display: none;" type="">Update</button>
+            <button class="btn btn-dark ms-4" id="cancel" style="display: none;" type="" >Cancel</button>
+        </div>
+      </form>
+      <div>
+        <table cellpadding="12" cellspacing="12" id="tableData" class="mx-auto mt-4 table">
+          <thead>
+              <tr>
+                  <th>No</th>
+                  <th>Name</th>
+                  <th>Department</th>
+                  <th>DOB</th>
+                  <th>Gender</th>
+                  <th>Hobbies</th>
+                  <th>Actions</th>
+              </tr>          
+          </thead>
+              <tbody></tbody>
+             
+          </table>
+      </div>
+    </div>
+</body>
+<script>
+
+  var updateIndex;
+ class arrayTypePractical{
+          
+          constructor(){
+            this.form = document.querySelector('[dataTypePractical]');
+            this.outputTable = document.querySelector('#tableData');
+            // console.log(this.form);
+            this.submitBtn = this.form.querySelector('[type="submit"]');
+            this.input = this.form.querySelector('#name'); 
+            this.department = this.form.querySelector('#department');
+            this.dob = this.form.querySelector('#dob');
+            this.updateIndex = null;
+
+            // this.gender = this.form.querySelector('[name="gender"]:checked');
+            // this.radiobutton1 = this.form.querySelector('#r1');
+            // this.radiobutton2 = this.form.querySelector('#r2');
+            this.hobbies = this.form.querySelector('#hobbies');
+
+            this.penicon = document.querySelectorAll('#pencil');
+           
+            this.deleteicon =document.querySelectorAll('#trashbin');
+            this.userDataArray = [];
+            this.updateBtn = this.form.querySelector('#update');
+            this.cancelBtn = this.form.querySelector('#cancel');
+          
+            this.form.addEventListener('submit', this.onSubmitHandler.bind(this));
+            // if(this.penicon) this.penicon.addEventListener('click',this.editHandler.bind(this));
+            this.cancelBtn.addEventListener('click',this.cancelbtnHandler.bind(this));
+            this.updateBtn.addEventListener('click',this.updatehandler.bind(this));
+           
+          }
+          onSubmitHandler(event){
+
+            let requiredFields = this.form.getElementsByClassName('required');
+              let validateForm = true;
+              Array.from(requiredFields).forEach((field)=>{
+                let fieldValue = field.value.trim();
+                if(fieldValue == undefined || fieldValue == '' || fieldValue.length <= 0){
+                  validateForm = false;
+                  return false;
+                }
+              });
+              if(!validateForm){
+                alert('Enter Necessary Field');
+                 return;
+               }
+
+            
+            event.preventDefault();
+              let name = this.input.value;
+              // console.log(name);
+              let genderEle = this.form.querySelector('[name="gender"]:checked') ? this.form.querySelector('[name="gender"]:checked').value : '';
+              // let radiovalue = genderEle.value;
+              // console.log(radiovalue);
+              
+              let Department = this.department.value;
+              // console.log(selectedDepartment);
+              let dobvalue = this.dob.value;
+              // console.log(dobvalue);
+            let hobbiesvalue = this.hobbies.value;
+            // console.log(hobbiesvalue);        
+        // //    console.log(r1);
+        //      if(r1.checked){
+        //     let radiobutton1value = this.radiobutton1.value;
+        //    console.log( radiobutton1value);
+        //    }
+
+        //    let r2 = this.radiobutton2;
+        // //    console.log(r2);
+        //      if(r2.checked){
+        //     let radiobutton1value = this.radiobutton2.value;
+        //    console.log( radiobutton1value);
+        //    }
+        let selectededit =   this.penicon;
+        let selecteddelete = this.deleteicon;
+        // console.log(selecteddelete );
+        let userData = {
+                name: name,
+                department: Department,
+                dob: dobvalue,
+                gender: genderEle,
+                hobbies: hobbiesvalue
+              }
+              // console.log(userData);
+              this.userDataArray.push(userData);
+              this.updateUI();
+              this.userDataArray.push()
+        }
+
+        editHandler(event){
+          event.preventDefault();
+          let updatebtn = this.updateBtn;
+          let submitbtn = this.submitBtn;
+          let cancelbtn = this.cancelBtn;
+          updatebtn.style.display="block";
+          cancelbtn.style.display="block";
+          submitbtn.style.display="none";
+          
+          let currentTarget = event.currentTarget;
+          // console.log(currentTarget);
+          let itemIndex = currentTarget.dataset.index;
+          // console.log(itemIndex);
+          this.updateIndex = itemIndex;
+          updateIndex = itemIndex;
+
+          // let table = this.outputTable;
+          let namevalue  = this.input.value;
+          // console.log(this.userDataArray[itemIndex].name);
+          this.input.value=this.userDataArray[itemIndex].name;
+          this.department.value = this.userDataArray[itemIndex].department;
+          this.dob.value = this.userDataArray[itemIndex].dob;
+          this.hobbies.value = this.userDataArray[itemIndex].hobbies;
+
+          let selectedGender = this.form.querySelector(`[name="gender"][value="${this.userDataArray[itemIndex].gender}"]`);
+          selectedGender.checked = true;
+
+          this.updateBtn.setAttribute('data-index', itemIndex);
+          // this.updateBtn.getAttribute('data-index');
+          // this.updateBtn.dataset.index
+          // this.form.querySelector('[name="gender"]:checked').value = this.userDataArray[itemIndex].gender; 
+          // console.log( this.form.querySelector('[name="gender"]:checked').value,this.userDataArray[itemIndex].gender)
+        }
+        updatehandler(event){
+          event.preventDefault();
+          let currentTarget = event.currentTarget;
+          console.log(currentTarget);
+          console.log(updateIndex);
+
+          let genderEle = this.form.querySelector('[name="gender"]:checked');
+          console.log(genderEle);
+          let updateData = {
+                name: this.input.value,
+                department: this.department.value,
+                dob: this.dob.value,
+                gender: genderEle.value,
+                hobbies: this.hobbies.value
+              }
+          // console.log( this.userDataArray[updateIndex].name );
+          this.userDataArray[updateIndex] = updateData;
+          this.updateUI();
+        }
+        cancelbtnHandler(event){
+          event.preventDefault();
+          let updatebtn = this.updateBtn;
+          updatebtn.style.display="none";
+          let cancelbtn = this.cancelBtn;
+          cancelbtn.style.display="none";
+          let submitbtn = this.submitBtn;
+          submitbtn.style.display="block";
+         this.form.reset();
+        }
+
+        updateUI(){
+
+          var table = '<tbody>'
+          for(let i = 0;i < this.userDataArray.length; i++){
+            table+= `<tr>
+          <td> ${i+1} </td>
+          <td>  ${this.userDataArray[i].name} </td>
+          <td>  ${this.userDataArray[i].department} </td>
+          <td>  ${this.userDataArray[i].dob} </td>
+          <td>  ${this.userDataArray[i].gender} </td>
+          <td>  ${this.userDataArray[i].hobbies} </td>
+          <td>  <a><button  class="update-record" data-index="${i}"><i class="fa fa-pencil" id="pencil"></i></button></a> <span class="mx-5"><a><button class="delete-record" data-index="${i}"><i class="fa fa-trash-o" id="trashbin"></i></button></a></span</td>
+          </tr>`
+              // console.log(tableData.rowIndex); 
+          }
+          table+='</tbody>';
+          document.getElementById('tableData').innerHTML = table;
+          // this.updateEvents();
+          this.windowhandler();
+          this.updateUSer();
+        }  
+        
+        updateUSer(){
+          let updatebtn = this.outputTable.querySelectorAll('.update-record');
+          updatebtn.forEach((btn)=>{
+             btn.addEventListener('click', this.editHandler.bind(this));
+           })
+        }
+        deleteUser(event){
+            // let currentTarget = event.currentTarget;
+          //  console.log(currentTarget,event.target);
+          //  console.log(currentTarget.classList);
+          //  if(currentTarget.classList.contains("delete-record")){
+          //   console.log('contains')
+          //  }
+           let currentTarget = event.currentTarget;
+          let itemIndex = currentTarget.dataset.index;
+          this.userDataArray.splice(itemIndex, 1); 
+          this.updateUI();
+      //  querySelector('[data-index="0"]')
+        }
+      
+        // updateEvents(){
+        //   let deleteBtns = this.outputTable.querySelectorAll('.delete-record');
+        //   deleteBtns.forEach((btn)=>{
+        //     btn.addEventListener('click', this.deleteUser.bind(this));
+        //   })
+        // }
+
+      windowhandler(){
+        let deleteBtns = this.outputTable.querySelectorAll('.delete-record');
+         deleteBtns.forEach((window)=>{
+             window.addEventListener('click', this.deleteUser.bind(this));
+          })
+        
+        // window.addEventListener("click", function(event) {
+        //   if(currentTarget.classList.contains("delete-record")){
+        //   //  console.log(itemIndex);
+        //   }
+        //     }); 
+      }      
+      }
+        new arrayTypePractical();   
+</script>
+</html>

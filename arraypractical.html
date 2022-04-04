@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+  </script>
+  <script src="https://kit.fontawesome.com/d888cf6b6e.js" crossorigin="anonymous"></script>
+  <title>Array</title>
+</head>
+
+<body>
+  <div class="container" style="width: 1000px;">
+    <h2 class="text-center border-bottom pb-5">Array</h2>
+    <form class="row g-3 needs-validation" arrayPractical novalidate>
+      <div class="row">
+        <div class="col-lg-6 col-sm-12 col-md-6">
+          <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3 ">Name</label>
+          <input type="text" class="form-control py-3 required" id="inputname" placeholder="Write" >
+        </div>
+        <div class="col-6 col-sm-12  col-md-6">
+          <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3 ">Department</label>
+          <select class="form-select py-3 required" id="department" aria-label="Example select with button addon" >
+            <option selected> Select Department </option>
+            <option value="frontend">frontend</option>
+            <option value="backend">backend</option>
+            <option value="designer">designer</option>
+            <option value="shopify">shopify</option>
+            <option value="management">management</option>
+            <option value="admin">admin</option>
+          </select>
+        </div>
+        <div class="col-lg-6 col-sm-12  col-md-6">
+          <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3">Date of birth</label>
+          <input type="date" class="form-control py-3 required" id="birth" placeholder="pick a Date" >
+        </div>
+        <div class="col-lg-6 col-sm-12 col-md-6">
+          <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3 ">E-mail</label>
+          <input type="email" class="form-control py-3 required" id="email" placeholder="Enter your email" >
+        </div>
+        <div class="col-lg-6 col-sm-12  col-md-6">
+          <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3 ">Gender</label>
+          <div class=" fw-bold pt-3">
+            <input type="radio" name="gender" value="male" id="btn1" checked> Male
+            <input type="radio" name="gender" value="female" id="btn2"> Female
+          </div>
+        </div>
+
+        <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3 " id="hobbys">Hobbies</label>
+        <div class="form-floating">
+          <textarea class="form-control required" placeholder="Write" id="hobbies" style="height: 100px"></textarea>
+
+        </div>
+        <div class="text-end pt-3">
+
+          <button class="btn btn-dark" id="submit" type="submit">Submit</button>
+          <button class="btn btn-dark " id="update" style="display: none;" type="">Update</button>
+          <button class="btn btn-dark" id="cancel" style="display: none;" type="">cancel</button>
+
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="container" style="width: 1000px;">
+    <table class=" mt-4 table">
+      <tbody id="tableData">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>DOB</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Hobbies</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+      </tbody>
+    </table>
+  </div>
+
+
+  <script>
+    var updateIndex;
+    var user_records= [];
+    // Create Class
+    class arrayPractical {
+      constructor() {
+        //  Assign Value to formfield
+        this.form = document.querySelector('[arrayPractical]');
+        this.outputTable = document.querySelector('#tableData');
+        this.submitBtn = this.form.querySelector('[type="submit"]');
+        this.inputname = this.form.querySelector('#inputname');
+        this.department = this.form.querySelector('#department');
+        this.bday = this.form.querySelector('#birth');
+        this.mail= this.form.querySelector('#email')
+        this.hobbies = this.form.querySelector('#hobbies')
+        this.form.addEventListener('submit', this.onSubmitHandler.bind(this));
+        // create array of object 
+        this.userDataArray = [];
+        this.editicon = this.form.querySelector('#pencil');
+        this.deleteicon = this.form.querySelector('#trashbin');
+        this.updateBtn = this.form.querySelector('#update');
+        this.cancelBtn = this.form.querySelector('#cancel');
+        this.cancelBtn.addEventListener('click', this.cancelbtnHandler.bind(this));
+        this.updateBtn.addEventListener('click', this.updatehandler.bind(this));
+        this.updateIndex = "null";
+        // localStorage.setItem(this.userDataArray, JSON.stringify(this.userDataArray));
+
+
+      }
+
+      // add submit event
+      onSubmitHandler(event) {
+        event.preventDefault();
+        
+        //  form validation 
+        let requiredFields = this.form.getElementsByClassName('required');
+              let validateForm = true;
+              Array.from(requiredFields).forEach((field)=>{
+                let fieldValue = field.value.trim();
+                if(fieldValue == undefined || fieldValue == '' || fieldValue.length <= 0){
+                  validateForm = false;
+                  return false;
+                }
+              });
+              if(!validateForm){
+                alert('Enter Necessary Field');
+                 return;
+               }
+
+        let firstname = this.inputname.value;
+        let selectedDpt = this.department.value;
+        let dob = this.bday.value;
+        let Email = this.mail.value;
+
+        let gender = this.form.querySelector('[name="gender"]:checked') ? this.form.querySelector(
+          '[name="gender"]:checked').value : '';
+
+        let hobby = this.hobbies.value;
+        let selectededit = this.editicon;
+        let selecteddelete = this.deleteicon;
+
+        // create object
+        // var existingEntries = JSON.parse(localStorage.getItem("userDataArray"));
+        // if(existingEntries == null)
+        //  this.existingEntries = [];
+
+        // let userData = {
+        //   name: firstname,
+        //   department: selectedDpt,
+        //   dob: dob,
+        //   gender: gender,
+        //   hobbies: hobby
+        // }
+
+        // localStorage.setItem(this.userData, JSON.stringify(userData));
+        // this.existingEntries.push(userData);
+        // console.log( this.existingEntries);
+        // localStorage.setItem(this.userDataArray, JSON.stringify(this.existingEntries));
+
+        
+        let userData = {
+          name: firstname,
+          department: selectedDpt,
+          dob: dob,
+          email: Email,
+          gender: gender,
+          hobbies: hobby
+        }
+
+       
+        user_records=JSON.parse(localStorage.getItem("userData"))?JSON.parse(localStorage.getItem("userData")):[]
+       if(user_records.some((v)=>{return v.email==Email}))
+        {
+           alert("duplicate data");
+        }
+      else
+        {
+          user_records.push({
+          name: firstname,
+          department: selectedDpt,
+          dob: dob,
+          email: Email,
+          gender: gender,
+          hobbies: hobby
+        })
+         localStorage.setItem("userData",JSON.stringify(user_records));
+       }
+        //  localStorage.setItem(this.userData, JSON.stringify(userData));
+        // localStorage.setItem(this.userDataArray, JSON.stringify(this.userDataArray));
+        // var existingEntries = JSON.parse(localStorage.getItem("userDataArray"));
+        // this.existingEntries = [];
+        // localStorage.setItem(this.userData, JSON.stringify(userData));
+        // this.existingEntries.push(userData);
+        // console.log( this.existingEntries);
+        // localStorage.setItem(this.userDataArray, JSON.stringify(this.existingEntries));
+
+
+        
+        
+        
+        
+        // document.getElementById("submit").innerHTML = localStorage.getItem("userData");
+        console.log(localStorage);
+        // push object value into Array
+        this.userDataArray.push(userData); 
+        console.log(userData);
+        console.log(this.userDataArray); 
+        this.updateUI();
+
+      }
+
+
+      // cancel event for cancel update data
+      
+      cancelbtnHandler(event) {
+        event.preventDefault();
+        let updatebtn = this.updateBtn;
+        updatebtn.style.display = "none";
+        let cancelbtn = this.cancelBtn;
+        cancelbtn.style.display = "none";
+        let submitbtn = this.submitBtn;
+        submitbtn.style.display = "block";
+        submitbtn.style.marginLeft = "auto";
+        this.form.reset();
+      }
+
+      // update method for making datatable
+      // updateUI() {
+      //   var datatable = '<tbody>'
+      //   for (let i = 0; i < this.userDataArray.length; i++) {
+      //     datatable += `<tr>
+      //     <td> ${i+1} </td>
+      //     <td>  ${this.userDataArray[i].name} </td>
+      //     <td>  ${this.userDataArray[i].department} </td>
+      //     <td>  ${this.userDataArray[i].dob} </td>
+      //     <td>  ${this.userDataArray[i].gender} </td>
+      //     <td>  ${this.userDataArray[i].hobbies} </td>
+      //     <td>  <button class="edit-record" style= "font-size: 12px;" data-index="${i}"><i class="fa fa-pencil" id="pencil"></i></button> <span class="mx-2"><><button class="delete-record"  style= "font-size: 12px;" data-index="${i}"><i class="fa fa-trash-o" id="trashbin"></i></button></span</td>
+      //     </tr>`
+      //     document.getElementById('tableData');
+      //   }
+      //   datatable += '</tbody>';
+      //   this.deleteEvents();
+      //   this.editEvents();
+      // }
+      updateUI() {
+        var datatable = '<tbody>'
+        for (let i = 0; i < this.userDataArray.length; i++) {
+          datatable += `<tr>
+          <td> ${i+1} </td>
+          <td>  ${this.userDataArray[i].name} </td>
+          <td>  ${this.userDataArray[i].department} </td>
+          <td>  ${this.userDataArray[i].dob} </td>
+          <td>  ${this.userDataArray[i].email} </td>
+          <td>  ${this.userDataArray[i].gender} </td>
+          <td>  ${this.userDataArray[i].hobbies} </td>
+          <td>  <a><button class="edit-record" style= "font-size: 12px;" data-index="${i}"><i class="fa fa-pencil" id="pencil"></i></button></a> <span class="mx-2"><a><button class="delete-record" style= "font-size: 12px;" data-index="${i}"><i class="fa fa-trash-o" id="trashbin"></i></button></a></span</td>
+          </tr>`
+          document.getElementById('tableData');
+        }
+        datatable += '</tbody>';
+        document.getElementById('tableData').innerHTML = datatable;
+        this.deleteEvents();
+        this.editEvents();
+      }
+
+
+      // edit event for edit user form data
+      editUser(event) {
+        let updatebtn = this.updateBtn;
+        let submitbtn = this.submitBtn;
+        let cancelbtn = this.cancelBtn;
+
+        cancelbtn.style.display = "inline-block";
+        cancelbtn.style.marginLeft = "auto";
+
+        updatebtn.style.display = "inline-block";
+        updatebtn.style.marginLeft = "auto";
+
+        submitbtn.style.display = "none";
+        let currentTarget = event.currentTarget;
+        console.log(currentTarget);
+        let itemIndex = currentTarget.dataset.index;
+        console.log(itemIndex);
+        this.updateIndex = itemIndex;
+        updateIndex = itemIndex;
+        console.log(updateIndex);
+        let namevalue = this.inputname.value;
+        this.inputname.value = this.userDataArray[itemIndex].name;
+        this.department.value = this.userDataArray[itemIndex].department;
+        this.bday.value = this.userDataArray[itemIndex].dob;
+        this.mail.value = this.userDataArray[itemIndex].email;
+        this.hobbies.value = this.userDataArray[itemIndex].hobbies;
+        let selctedGender = this.form.querySelector(
+          `[name="gender"][value="${this.userDataArray[itemIndex].gender}"]`);
+        selctedGender.checked = true;
+        this.updateBtn.setAttribute('data-index', itemIndex);
+
+      }
+
+      // bind edit event with userdata
+      editEvents() {
+        let selectededit = this.outputTable.querySelectorAll('.edit-record');
+        selectededit.forEach((btn) => {
+          btn.addEventListener('click', this.editUser.bind(this));
+        });
+      }
+
+      // update event for update user data
+      updatehandler(event) {
+        event.preventDefault();
+        let currentTarget = event.currentTarget;
+        console.log(currentTarget);
+        console.log(updateIndex);
+
+        let genderEle = this.form.querySelector('[name="gender"]:checked');
+        console.log(genderEle);
+        // create object
+        let updateData = {
+          name: this.inputname.value,
+          department: this.department.value,
+          dob: this.bday.value,
+          email:this.mail.value,
+          gender: genderEle.value,
+          hobbies: this.hobbies.value
+        }
+
+        
+        // assign object value to userDataArray 
+        this.userDataArray[updateIndex] = updateData;
+        this.updateUI();
+
+        user_records = user_records[updateIndex];
+          user_records=JSON.parse(localStorage.getItem("updateData"))?JSON.parse(localStorage.getItem("updateData")):[]
+          user_records.push({
+          name: this.inputname.value,
+          department: this.department.value,
+          dob: this.bday.value,
+          email:this.mail.value,
+          gender: genderEle.value,
+          hobbies: this.hobbies.value
+        })
+        localStorage.setItem("updateData",JSON.stringify(user_records));
+        // update_records=JSON.parse(localStorage.getItem("updateData"))?JSON.parse(localStorage.getItem("updateData")):[]
+        // if(update_records.some((v)=>{return v.email==email}))
+        // {
+        //   alert("duplicate data");
+        // }
+        // else
+        // {
+        //   update_records.push({
+        //   name: this.inputname.value,
+        //   department: this.department.value,
+        //   dob: this.bday.value,
+        //   email:this.mail.value,
+        //   gender: genderEle.value,
+        //   hobbies: this.hobbies.value
+        // })
+        // localStorage.setItem("updateData",JSON.stringify(update_records));
+        // }
+      }
+
+
+      // delete event for delete user data
+      deleteUser(event) {
+        let currentTarget = event.currentTarget;
+        let itemIndex = currentTarget.dataset.index;
+        console.log(itemIndex);
+        this.userDataArray.splice(itemIndex, 1);
+        this.updateUI();
+      }
+
+      // bind Delete event with userdata
+      deleteEvents() {
+        let deleteBtns = this.outputTable.querySelectorAll('.delete-record');
+        deleteBtns.forEach((btn) => {
+          btn.addEventListener('click', this.deleteUser.bind(this));
+        })
+      }
+    }
+
+    // calling  class
+    new arrayPractical();
+  </script>
+</body>
+
+</html>

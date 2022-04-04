@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+  </script>
+  <script src="https://kit.fontawesome.com/d888cf6b6e.js" crossorigin="anonymous"></script>
+  <title>Array</title>
+</head>
+
+<body>
+  <p id="showData"></p>
+  <div class="container" style="width: 1000px;">
+    <h2 class="text-center border-bottom pb-5">Array</h2>
+    <form class="row g-3 needs-validation" arrayPractical novalidate>
+      <div class="row">
+        <div class="col-6">
+          <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3">Name</label>
+          <input type="text" class="form-control py-3 required" id="inputname" placeholder="Write">
+        </div>
+        <div class="col-6">
+          <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3">Department</label>
+          <select class="form-select py-3 required" id="department" aria-label="Example select with button addon">
+            <option selected> Select Department </option>
+            <option value="frontend">frontend</option>
+            <option value="backend">backend</option>
+            <option value="designer">designer</option>
+            <option value="shopify">shopify</option>
+            <option value="management">management</option>
+            <option value="admin">admin</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3">Date of birth</label>
+          <input type="date" class="form-control py-3 required" id="birth" placeholder="pick a Date">
+        </div>
+        <div class="col-6">
+          <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3 required">Gender</label>
+          <div class=" fw-bold pt-3">
+            <input type="radio" name="gender" value="male" id="btn1" > Male
+            <input type="radio" name="gender" value="female" id="btn2"> Female
+          </div>
+        </div>
+
+        <label for="exampleFormControlInput1" class="form-label fs-4 fw-bold pt-3 required" id="hobbys">Hobbies</label>
+        <div class="form-floating">
+          <textarea class="form-control" placeholder="Write" id="hobbies" style="height: 100px"></textarea>
+
+        </div>
+        <div class="text-end pt-3">
+        
+            <button class="btn btn-dark" id="submit" type="submit">Submit</button>
+            <button class="btn btn-dark " id="update" style="display: none;" type="" >Update</button>
+            <button class="btn btn-dark" id="cancel" style="display: none;" type="" >cancel</button>
+         
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="container" style="width: 1000px;">
+    <table  class=" mt-4 table">
+      <tbody id="tableData">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>DOB</th>
+            <th>Gender</th>
+            <th>Hobbies</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+      </tbody>
+    </table>
+  </div>
+
+ 
+  <script>
+
+    var  updateIndex;
+    class arrayPractical {
+      constructor() {
+        this.form = document.querySelector('[arrayPractical]');
+        // console.log(this.form);
+        this.outputTable = document.querySelector('#tableData');
+        this.submitBtn = this.form.querySelector('[type="submit"]');
+        this.inputname = this.form.querySelector('#inputname');
+        this.department = this.form.querySelector('#department');
+        this.bday = this.form.querySelector('#birth');
+        this.hobbies = this.form.querySelector('#hobbies')
+        this.form.addEventListener('submit', this.onSubmitHandler.bind(this));
+        this.userDataArray = [];
+        this.editicon=this.form.querySelector('#pencil');
+        this.deleteicon=this.form.querySelector('#trashbin');
+        this.updateBtn = this.form.querySelector('#update');
+        this.cancelBtn = this.form.querySelector('#cancel');
+        this.cancelBtn.addEventListener('click', this.cancelbtnHandler.bind(this));
+        this.updateBtn.addEventListener('click',this.updatehandler.bind(this));
+        this.updateIndex= "null";
+
+
+
+      }
+
+      onSubmitHandler(event) {
+        event.preventDefault();
+        // let requiredFields = this.form.getElementsByClassName('required');
+        // let validateForm = true;
+        //  Array.from(requiredFields).forEach((field) => {
+        //  let fieldValue = field.value.trim();
+        //  if (fieldValue == undefined || fieldValue == '' || fieldValue.length <= 0) {
+        //     validateForm = false;
+        //     alert("add a value");
+        //     return false;
+        //   }
+        // });
+        // var selectedRow = null
+        //       let formData = this.userDataArray.value;
+        //         if (selectedRow == null)
+        //             k;
+        //         else
+        //             updateRecord(formData);
+        //         this.resetForm.value;
+            
+
+        let firstname = this.inputname.value;
+        // console.log(firstname);
+        let selectedDpt = this.department.value;
+        // console.log(selectedDpt);
+        let dob = this.bday.value;
+        // console.log(dob);
+        let gender = this.form.querySelector('[name="gender"]:checked') ? this.form.querySelector(
+          '[name="gender"]:checked').value : '';
+        // console.log(gender);
+        let hobby = this.hobbies.value;
+        // console.log(hobby);
+        let selectededit = this.editicon;
+      let selecteddelete = this.deleteicon;
+
+        let userData = {
+          name: firstname,
+          department: selectedDpt,
+          dob: dob,
+          gender: gender,
+          hobbies: hobby
+        }
+        this.userDataArray.push(userData);
+        
+        this.updateUI();
+        // this.updateUI(this.userDataArray);
+        // console.log(this.userDataArray);
+
+      //   var datatable = '<tbody>'
+      //   for (let i = 0; i < this.userDataArray.length; i++) {
+      //    datatable += '<tr>';
+      //     datatable += `<td> ${i+1} </td>`;
+      //     datatable += `<td>  ${this.userDataArray[i].name} </td>`;
+      //     datatable += `<td>  ${this.userDataArray[i].department} </td>`;
+      //     datatable += `<td>  ${this.userDataArray[i].dob} </td>`;
+      //     datatable += `<td>  ${this.userDataArray[i].gender} </td>`;
+      //     datatable += `<td>  ${this.userDataArray[i].hobbies} </td>`;
+      //     datatable +=
+      //       `<td>  <a href=""><btn onClick="onEdit(this)" ><i class="fa fa-pencil" id="pencil"></i></btn></a> <span class="mx-5"><a href=""><btn onClick="on
+      //         Delete(this)" ><i class="fa fa-trash-o" id="trashbin"></i></btn></a></span</td>`;
+      //    datatable += '</tr>';
+      //   }
+      //  datatable+= '</tbody>';
+      //   document.getElementById('tableData').innerHTML = datatable;
+      }
+
+     
+
+      cancelbtnHandler(event) {
+      event.preventDefault();
+      let updatebtn = this.updateBtn;
+      updatebtn.style.display = "none";
+      let cancelbtn = this.cancelBtn;
+      cancelbtn.style.display = "none";
+      let submitbtn=this.submitBtn;
+      submitbtn.style.display ="block";
+      submitbtn.style.marginLeft = "auto";
+      this.form.reset();
+     
+     
+      // this.inputname.value = "";
+      // this.department.value = "";
+      // this.bday.value = "";
+      // this.hobbies.value = ""; 
+    }
+
+      // updateUI(data) {
+      //   data.forEach((item) => {
+      //     console.log(item)
+      //   })
+      // }
+      updateUI(){
+          var datatable = '<tbody>'
+          for(let i = 0;i < this.userDataArray.length; i++){
+            datatable+= `<tr>
+          <td> ${i+1} </td>
+          <td>  ${this.userDataArray[i].name} </td>
+          <td>  ${this.userDataArray[i].department} </td>
+          <td>  ${this.userDataArray[i].dob} </td>
+          <td>  ${this.userDataArray[i].gender} </td>
+          <td>  ${this.userDataArray[i].hobbies} </td>
+          <td>  <a><button class="edit-record" data-index="${i}"><i class="fa fa-pencil" id="pencil"></i></button></a> <span class="mx-5"><a><button class="delete-record" data-index="${i}"><i class="fa fa-trash-o" id="trashbin"></i></button></a></span</td>
+          </tr>`
+              document.getElementById('tableData');
+              // console.log(tableData.rowIndex);
+          }
+          datatable+='</tbody>';
+          document.getElementById('tableData').innerHTML = datatable;
+          this.deleteEvents();
+          this.editEvents();
+          // this.cancelbtnHandler(event);
+
+        }
+         
+        //    editUser(event){
+        //   let currentTarget = event.currentTarget;
+        //   let itemIndex = currentTarget.dataset.index;
+        //   let submitbtn = this.submitBtn;
+        //     let updatebtn = this.updateBtn;
+        //     updatebtn.style.display = "block";
+        //     submitbtn.style.display = "none";
+        //   this.updateUI();
+        // }
+
+      editUser(event){
+      let updatebtn = this.updateBtn;
+      let submitbtn = this.submitBtn;
+      let cancelbtn = this.cancelBtn;
+      cancelbtn.style.display = "inline-block";
+      cancelbtn.style.marginLeft = "auto";
+      // cancelbtn.style.width = "137px";
+
+      updatebtn.style.display = "inline-block";
+      updatebtn.style.marginLeft = "auto";
+      // updatebtn.style.width = "137px";
+      
+      submitbtn.style.display = "none";
+      let currentTarget = event.currentTarget;
+      console.log(currentTarget);
+      let itemIndex = currentTarget.dataset.index;
+      console.log(itemIndex);
+      this.updateIndex = itemIndex;
+       updateIndex = itemIndex;
+       console.log(updateIndex);
+      // let table = this.outputTable;
+      let namevalue = this.inputname.value;
+      // console.log(this.userDataArray[itemIndex].name);
+      this.inputname.value = this.userDataArray[itemIndex].name;
+      this.department.value = this.userDataArray[itemIndex].department;
+      this.bday.value = this.userDataArray[itemIndex].dob;
+      this.hobbies.value = this.userDataArray[itemIndex].hobbies;
+      let selctedGender = this.form.querySelector(`[name="gender"][value="${this.userDataArray[itemIndex].gender}"]`);
+      selctedGender.checked = true;
+      this.updateBtn.setAttribute('data-index', itemIndex);
+    
+       }
+
+        editEvents(){
+          let selectededit = this.outputTable.querySelectorAll('.edit-record');
+          selectededit.forEach((btn) => {
+          btn.addEventListener('click', this.editUser.bind(this));
+            });
+         }
+
+         updatehandler(event){
+          event.preventDefault();
+          let currentTarget = event.currentTarget;
+          console.log(currentTarget);
+          console.log(updateIndex);
+
+          let genderEle = this.form.querySelector('[name="gender"]:checked');
+          console.log(genderEle);
+          let updateData = {
+                name: this.inputname.value,
+                department: this.department.value,
+                dob: this.bday.value,
+                gender: genderEle.value,
+                hobbies: this.hobbies.value
+              }
+          // console.log( this.userDataArray[updateIndex].name );
+          this.userDataArray[updateIndex] = updateData;
+          this.updateUI();
+        }
+
+      
+         deleteUser(event){
+          let currentTarget = event.currentTarget;
+          let itemIndex = currentTarget.dataset.index;
+          console.log(itemIndex);
+          this.userDataArray.splice(itemIndex, 1);
+          this.updateUI();
+        //   // querySelector('[data-index="0"]')
+        // console.log(event.target)
+        // console.log(event.currentTarget)
+
+        // if(event.currentTarget.classList.contains('delete-record')){
+        //   console.log('yes');
+        // }
+        // else{
+        //   console.log('no');
+        // }
+          //  window.addEventListener('click', function(event){
+        // console.log(event.currentTarget);
+        //     });
+
+         }
+    
+        deleteEvents(){
+          let deleteBtns = this.outputTable.querySelectorAll('.delete-record');
+          deleteBtns.forEach((btn)=>{
+            btn.addEventListener('click', this.deleteUser.bind(this));
+          })
+        }
+    }
+
+    new arrayPractical();
+  </script>
+</body>
+
+</html>
+
